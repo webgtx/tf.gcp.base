@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "google" {
-    credentials = file(".terraform/init64-key.json")
+    credentials = file(".terraform/init64-key.json") # Specify the path to your cloud account key
 
     project = "init64"
     region  = "europe-west2"
@@ -22,8 +22,12 @@ resource "google_compute_instance" "vm_instance" {
 
     boot_disk {
         initialize_params {
-          image = "debian-cloud/debian-11"
+          image = "rocky-linux-9"
         }
+    }
+
+    metadata = {
+        ssh-keys = "admin:${file("~/.ssh/id_rsa.pub")}" # Specify the path to your public key
     }
 
     network_interface {
